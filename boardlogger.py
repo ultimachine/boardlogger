@@ -47,7 +47,6 @@ def getInternalSerialNumber():
         if iserial == "":
             beep()
             print colored("USB Serial port does not exist or is not connected.","yellow")
-            return 0
         return iserial
 
 while True:
@@ -62,13 +61,15 @@ while True:
     subprocess.call(["/usr/bin/sudo",directory+"/dfu32.sh",directory+"/32u2fw.hex"])
     time.sleep(1)
 
-    if not getInternalSerialNumber() and serialNumber == "": continue
+    if len(getInternalSerialNumber()) == 0 and len(serialNumber) == 0:
+        continue
  
     print "iserial: " + str(iserial)
 
     print "Enter note : "
     note = raw_input().strip()
-    if not len(note): continue
+    if not len(note): 
+        continue
 
     testStorage = psycopg2.connect(postgresInfo)
     cursor = testStorage.cursor()
